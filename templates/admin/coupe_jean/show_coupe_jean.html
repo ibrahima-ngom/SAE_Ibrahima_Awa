@@ -1,0 +1,40 @@
+{% extends 'admin/layout_admin.html' %}
+
+{% block title %}
+    <title>afficher les coupes d'jean</title>
+{% endblock %}
+
+{% block body %}
+<h3>Déclinaison et/ou coupe d'jean (catégorie)</h3>
+<a class="btn btn-outline-success" href="/admin/coupe-jean/add">ajouter un coupe d'jean</a>
+<br><br>
+
+<table class="table">
+    <thead class="thead-dark">
+        <tr>
+           <th>designation</th> <th>(id_coupe_jean)</th><th>nombre d'jeans</th><th>opération</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% if coupes_jean | length >= 1 %}
+        {% for ligne in coupes_jean %}
+           <tr>
+                  <td>{{ ligne.libelle }}</td>
+                  <td>{{ ligne.id_coupe_jean }}</td>
+                   <td><span style="color: red">{{ ligne.nbr_jeans }}</span></td>
+                  <td>
+                      <a class="btn btn-outline-danger" href="/admin/coupe-jean/edit?id_coupe_jean={{ ligne.id_coupe_jean }}">editer</a>&nbsp;
+                      <a class="btn btn-outline-warning" href="/admin/coupe-jean/delete?id_coupe_jean={{ ligne.id_coupe_jean }}">supprimer</a>
+                  </td>
+           </tr>
+        {% endfor %}
+    {% else %}
+            <tr>
+                  <td>
+                      pas de coupe d'jean
+                  </td>
+           </tr>
+    {% endif %}
+    </tbody>
+</table>
+{% endblock %}
