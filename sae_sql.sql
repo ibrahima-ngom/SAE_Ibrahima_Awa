@@ -143,5 +143,3 @@ LIMIT 1;
 SELECT *
 FROM jean
 WHERE prix_jean > (SELECT AVG(prix_jean) FROM jean);
-
-
