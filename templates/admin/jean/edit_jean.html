@@ -20,43 +20,43 @@ types_article : tableau de dictionnaires
     <h2>modifier un article</h2>
         <div class="row mt-5">
         {%  if article.image is not none %}
-            <img class="card-img-top rounded mx-4 d-block"  style="width:200px; height:200px; border: 1px solid black; padding: 25px;"   id="img_output" src="{{ url_for('static', filename = 'images/') }}{{ article.image}}"  alt="image  de {{ article.nom }}" >
+            <img class="card-img-top rounded mx-4 d-block"  style="width:200px; height:200px; border: 1px solid black; padding: 25px;"   id="img_output" src="{{ url_for('static', filename = 'images/') }}{{ jean.image}}"  alt="image  de {{ jean.nom }}" >
         {% endif %}
             <div class="w-25">
-                <form class="w-190" method="post" action="/admin/article/edit" enctype="multipart/form-data">
-                    <input type="hidden" value="{{ article.id_article }}" name="id_article">
+                <form class="w-190" method="post" action="/admin/jean/edit" enctype="multipart/form-data">
+                    <input type="hidden" value="{{ jean.id_jean }}" name="id_jean">
                     <label for="nom">Nom :
-                        <input name="nom" type="text" value="{{ article.nom }}" class="form-control">
+                        <input name="nom" type="text" value="{{ jean.nom }}" class="form-control">
                     </label>
                     <label for="prix" > Prix (€) :
-                        <input name="prix" type="number" min="0.0" step="0.01" value="{{ article.prix }}" class="form-control" >
+                        <input name="prix" type="number" min="0.0" step="0.01" value="{{ jean.prix }}" class="form-control" >
                     </label>
                     <label for="image">Image :                       {# à modifier #}
-                        <input name="image"  onchange="loadFile(event)" type="file" class="form-control" value="{{ article.image }}">             {# à modifier #}
+                        <input name="image"  onchange="loadFile(event)" type="file" class="form-control" value="{{ jean.image }}">             {# à modifier #}
                     </label>                                         {# à modifier #}
 {#                https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask#}
 
-                <label for="type_article_id">Type de l'article :
-                    <select name="type_article_id" class="form-select">
+                <label for="type_jean_id">Type de jean :
+                    <select name="type_jean_id" class="form-select">
                             {% for type in types_article %}
-                                 <option value="{{ type.id_type_article }}" {% if type.id_type_article == article.type_article_id %} selected {% endif %}> {{ type.libelle }}</option>
+                                 <option value="{{ type.id_type_jean }}" {% if type.id_type_jean == jean.type_jean_id %} selected {% endif %}> {{ type.libelle }}</option>
                             {% endfor %}
                         </select>
                     </label>
                     <label for="description">Description :
-                        <input name="description" type="text" value="{{ article.description }}" class="form-control">
+                        <input name="description" type="text" value="{{ jean.description }}" class="form-control">
                     </label>
                     <button class="btn btn-primary mt-2">
                                 Modifier
                     </button>
-                    <a class="btn btn-secondary mt-2" href="/admin/article/show"  role="button">retour</a>
+                    <a class="btn btn-secondary mt-2" href="/admin/jean/show"  role="button">retour</a>
                 </form>
 
                 <div class="container-fluid " style="width: 1000px;">
 
                     <div style="display: flex; justify-content: space-between">
                         <h3>déclinaison en fonction de la taille/couleur (variante)</h3>
-                        <a class="img-fluid" href="/admin/declinaison_article/add?id_article={{ article.id_article }}">
+                        <a class="img-fluid" href="/admin/declinaison_jean/add?id_jean={{jean.id_jean}}">
                             <button class="btn btn-primary">
                                 Ajouter une déclinaison (variante)
                             </button>
@@ -69,7 +69,7 @@ types_article : tableau de dictionnaires
                         <th style="width: 300px">stock</th>
                         <th style="width: 300px">opérations</th>
 
-                        {% if declinaisons_article | length == 0 %}
+                        {% if declinaisons_jean | length == 0 %}
                             <tr>
                                 <td>Aucun modèle</td>
                                 <td></td>
@@ -77,22 +77,22 @@ types_article : tableau de dictionnaires
                                 <td></td>
                             </tr>
                         {% else %}
-                            {% for declinaison_article in declinaisons_article %}
+                            {% for declinaison_jean in declinaisons_article %}
                                 <tr>
                                     <td>
-                                        {{ declinaison_article.libelle_taille }}
+                                        {{ declinaison_jean.libelle_taille }}
                                     </td>
                                     <td>
-                                        {{ declinaison_article.libelle_couleur }}
+                                        {{ declinaison_jean.libelle_couleur }}
                                     </td>
-                                    <td>{{ declinaison_article.stock }}</td>
+                                    <td>{{ declinaison_jean.stock }}</td>
                                     <td style="display: flex">
-                                        <a class="img-fluid" href="/admin/declinaison_article/delete?id_declinaison_article={{ declinaison_article.id_declinaison_article }}&amp;id_article={{ declinaison_article.article_id }}">
+                                        <a class="img-fluid" href="/admin/declinaison_jean/delete?id_declinaison_jean={{ declinaison_jean.id_declinaison_jean }}&amp;id_jean={{ declinaison_jean.jean_id }}">
                                             <button class="btn btn-primary mx-1">
                                                 supprimer
                                             </button>
                                         </a>
-                                        <a class="img-fluid" href="/admin/declinaison_article/edit?id_declinaison_article={{ declinaison_article.id_declinaison_article }}">
+                                        <a class="img-fluid" href="/admin/declinaison_jean/edit?id_declinaison_jean={{ declinaison_jean.id_declinaison_jean }}">
                                             <button class="btn btn-primary mx-1">
                                                 editer
                                             </button>
