@@ -113,3 +113,5 @@ def client_panier_filtre_suppr():
     # suppression  des variables en session
     print("suppr filtre")
     return redirect('/client/article/show')
+
+
