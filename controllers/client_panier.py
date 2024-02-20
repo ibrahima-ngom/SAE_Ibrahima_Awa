@@ -13,11 +13,11 @@ client_panier = Blueprint('client_panier', __name__,
 def client_panier_add():
     mycursor = get_db().cursor()
     id_client = session['id_user']
-    id_article = request.form.get('id_article')
+    id_jean = request.form.get('id_jean')
     quantite = request.form.get('quantite')
     # ---------
-    #id_declinaison_article=request.form.get('id_declinaison_article',None)
-    id_declinaison_article = 1
+    #id_declinaison_jean=request.form.get('id_declinaison_article',None)
+    id_declinaison_jean = 1
 
 # ajout dans le panier d'une déclinaison d'un article (si 1 declinaison : immédiat sinon => vu pour faire un choix
     # sql = '''    '''
@@ -105,7 +105,7 @@ def client_panier_filtre():
     filter_types = request.form.getlist('filter_types', None)
     # test des variables puis
     # mise en session des variables
-    return redirect('/client/article/show')
+    return redirect('/client/jean/show')
 
 
 @client_panier.route('/client/panier/filtre/suppr', methods=['POST'])

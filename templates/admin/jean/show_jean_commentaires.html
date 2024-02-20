@@ -48,7 +48,7 @@
                                       <button class="btn btn-primary" > supprimer </button>
                                   </form>
                             {% if commentaire.utilisateur_id != session['id_user'] %}
-                                  <form  action="/admin/article/commentaires/repondre"  style="display: inline-block;"  method="GET" >
+                                  <form  action="/admin/jean/commentaires/repondre"  style="display: inline-block;"  method="GET" >
                                       <input type="hidden" name="id_jean" value="{{ commentaire.id_jean}}">
                                       <input type="hidden" name="id_utilisateur" value="{{ commentaire.id_utilisateur }}">
                                       <input type="hidden" name="date_publication" value="{{ commentaire.date_publication }}">
