@@ -17,7 +17,7 @@ admin_jean = Blueprint('admin_jean', __name__,
 @admin_jean.route('/admin/jean/show')
 def show_jean():
     mycursor = get_db().cursor()
-    sql = '''SELECT j.id_jean, j.nom_jean, j.coupe_jean_id, j.prix_jean, d.stock AS stock, COUNT(c.id_jean) AS nb_commentaires_nouveaux, COUNT(DISTINCT d.id_declinaison_jean) AS nb_declinaisons, j.image
+    sql = '''SELECT j.id_jean, j.nom_jean, j.coupe_jean_id, j.prix_jean, d.stock AS stock, COUNT(c.id_commentaire) AS nb_commentaires_nouveaux, COUNT(DISTINCT d.id_declinaison_jean) AS nb_declinaisons, j.image
              FROM jean j
              LEFT JOIN commentaire c ON j.id_jean = c.id_jean AND c.valider = 'non'
              LEFT JOIN declinaison d ON j.id_jean = d.id_jean
@@ -25,6 +25,7 @@ def show_jean():
     mycursor.execute(sql)
     jeans = mycursor.fetchall()
     return render_template('admin/jean/show_jean.html', jeans=jeans)
+
 
 
 
@@ -77,9 +78,9 @@ def valid_add_jean():
     mycursor.execute(sql, tuple_add)
     get_db().commit()
 
-    print(u'article ajouté , nom: ', nom, ' - coupe_jean:', coupe_jean_id, ' - prix:', prix,
+    print(u'jean ajouté , nom: ', nom, ' - coupe_jean:', coupe_jean_id, ' - prix:', prix,
           ' - description:', description, ' - image:', image)
-    message = u'jean ajouté , nom:' + nom + '- type_article:' + coupe_jean_id + ' - prix:' + prix + ' - description:' + description + ' - image:' + str(
+    message = u'jean ajouté , nom:' + nom + '- coupe_jean:' + coupe_jean_id + ' - prix:' + prix + ' - description:' + description + ' - image:' + str(
         image)
     flash(message, 'alert-success')
     return redirect('/admin/jean/show')
@@ -128,31 +129,28 @@ def delete_jean():
 
 @admin_jean.route('/admin/jean/edit', methods=['GET'])
 def edit_jean():
-    id_jean=request.args.get('id_jean')
+    id_jean = request.args.get('id_jean')
     mycursor = get_db().cursor()
-    sql = '''
-    requête admin_jean_6    
-    '''
-    mycursor.execute(sql, id_jean)
+
+    # Requête pour récupérer les données de l'article à éditer
+    sql_article = '''SELECT * FROM jean WHERE id_jean = %s'''
+    mycursor.execute(sql_article, (id_jean,))
     jean = mycursor.fetchone()
-    print(jean)
-    sql = '''
-    requête admin_jean_7
-    '''
-    mycursor.execute(sql)
+
+    # Requête pour récupérer les coupes de jean disponibles
+    sql_coupes_jean = '''SELECT * FROM coupes_jean'''
+    mycursor.execute(sql_coupes_jean)
     coupes_jean = mycursor.fetchall()
 
-    # sql = '''
-    # requête admin_jean_6
-    # '''
-    # mycursor.execute(sql, id_jean)
+    # Requête pour récupérer les déclinaisons de ce jean (variante)
+    # sql_declinaisons_jean = '''SELECT * FROM declinaisons WHERE id_jean = %s'''
+    # mycursor.execute(sql_declinaisons_jean, (id_jean,))
     # declinaisons_jean = mycursor.fetchall()
 
-    return render_template('admin/jean/edit_jean.html'
-                           ,jean=jean
-                           ,coupes_jean=coupes_jean
-                         #  ,declinaisons_jean=declinaisons_jean
-                           )
+    return render_template('admin/jean/edit_jean.html',
+                           jean=jean,
+                           coupes_jean=coupes_jean)
+                           # declinaisons_jean=declinaisons_jean)
 
 
 @admin_jean.route('/admin/jean/edit', methods=['POST'])

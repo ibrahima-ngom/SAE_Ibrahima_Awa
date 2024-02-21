@@ -14,30 +14,30 @@
 {% endblock %}
 
 {% block title %}
-    <title>afficher les types d'article</title>
+    <title>afficher les coupes jean</title>
 {% endblock %}
 
 {% block body %}
 <br>
 
-    <h2> nombre d'articles :
-{#    <span style="color: red;">{{ cout_total.nbr_articles }}</span></h2>#}
+    <h2> nombre de jeans :
+{#    <span style="color: red;">{{ cout_total.nbr_jeans }}</span></h2>#}
 
 <table class="table">
     <thead class="thead-dark">
         <tr>
-           <th>type d'article</th> <th>(id)</th><th>nombre d'articles</th>
+           <th>coupe_jean</th> <th>(id)</th><th>nombre de jeans</th>
         </tr>
     </thead>
     <tbody>
-    {% if types_articles_nb | length >= 1 %}
-        {% for ligne in types_articles_nb %}
+    {% if coupes_jean_nb | length >= 1 %}
+        {% for ligne in coupes_jean_nb %}
            <tr>
                   <td>{{ ligne.libelle }}</td>
-                  <td>{{ ligne.id_type_article }}</td>
+                  <td>{{ ligne.id_coupe_jean }}</td>
                    <td><span style="color: red">
-                       {% if ligne.nbr_articles_stock is not none %}  {{ ligne.nbr_articles }} {% else %}
-                       pas d'article {% endif %}
+                       {% if ligne.nbr_jeans_stock is not none %}  {{ ligne.nbr_jeans }} {% else %}
+                       pas de jeans {% endif %}
                    </span></td>
 
            </tr>
@@ -72,7 +72,7 @@
   			labels: {{ labels | safe }},
   			datasets: [
   				{
-  				label: "Type d'articles (nombre)",
+  				label: "coupes_jean (nombre)",
   				data: {{ values | safe }},
   				fill: false,
                  backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850",
@@ -110,7 +110,7 @@
     options: {
       title: {
         display: true,
-        text: 'Type article : nombre'
+        text: 'coupe_jean : nombre'
       }
      }
     });

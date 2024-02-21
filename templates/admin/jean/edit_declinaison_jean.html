@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block body %}
-    <h2>modifier la déclinaison d'un article </h2>
+    <h2>modifier la déclinaison d'un jean </h2>
         <div class="row mt-5">
             jean : <strong>{{ declinaison_jean.nom }}</strong><br>
             {% if declinaison_jean.image_jean is defined and declinaison_jean.image_jean is not none %}
@@ -37,7 +37,7 @@
                     {% endif %}
                     {% if  d_couleur_uniq is defined and  d_couleur_uniq==1 %}
                         <div>!</div><div><strong>Une couleur unique est définie </strong></div>
-                          <div>il faut faut la supprimer pour modifier la couleur</div>
+                          <div>il faut la supprimer pour modifier la couleur</div>
                         <input type="hidden" name="couleur" value="1">
                     {% else %}
                     <label for="id_couleur"> couleur :
@@ -55,7 +55,7 @@
                     <input name="submit" type="submit" value="Modifier" class="btn btn-primary mt-2">
                 </label>
                 </form>
-                <a href="/admin/jean/edit?id_article={{ declinaison_jean.jean_id }}"><button class="btn btn-secondary  mt-4">annuler</button></a>
+                <a href="/admin/jean/edit?id_jean={{ declinaison_jean.jean_id }}"><button class="btn btn-secondary  mt-4">annuler</button></a>
             </div>
         </div>
 {% endblock %}

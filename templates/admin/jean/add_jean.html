@@ -1,13 +1,14 @@
-{% extends 'admin/layout_admin.html' %}
-
-{% block title %}
-    <title>ajouter un jean</title>
-{% endblock %}
-
-{% block body %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un jean</title>
+</head>
+<body>
     <h2>ajouter un jean</h2>
     <div class="row mt-5">
-        <img class="card-img-top rounded mx-4 d-block"  style="width:200px; height:200px; border: 1px solid black; padding: 5px;" id="img_output" src="{{ url_for('static', filename = 'images/')}}no_photo.jpeg" alt="">
+        <img id="img_output" style="width:200px; height:200px; border: 1px solid black; padding: 5px;" src="{{ url_for('static', filename = 'images/no_photo.jpeg') }}" alt="">
         <div class="w-25">
             <form class="w-190" method="post" action="/admin/jean/add" enctype="multipart/form-data">
                 <label for="nom">Nom :
@@ -38,4 +39,12 @@
         <a href="/admin/jean/show"><button class="btn btn-secondary mt-2">annuler</button></a>
         </div>
     </div>
-{% endblock %}
+
+    <script>
+        var loadFile = function(event) {
+            var output = document.getElementById('img_output');
+            output.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
+</body>
+</html>

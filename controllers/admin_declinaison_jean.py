@@ -9,7 +9,7 @@ admin_declinaison_jean= Blueprint('admin_declinaison_jean', __name__,
                          template_folder='templates')
 
 
-@admin_declinaison_jean.route('/admin/declinaison_jean/add')
+@admin_declinaison_jean.route('/admin/declinaison_jean/add', methods=['GET'])
 def add_declinaison_jean():
     id_jean = request.args.get('id_jean')
     mycursor = get_db().cursor()
@@ -106,7 +106,7 @@ def edit_declinaison_jean():
     return render_template('admin/jean/edit_declinaison_jean.html',
                            tailles=tailles,
                            couleurs=couleurs,
-                           declinaison_article=declinaison_jean,
+                           declinaison_jean=declinaison_jean,
                            d_taille_uniq=d_taille_uniq,
                            d_couleur_uniq=d_couleur_uniq)
 
