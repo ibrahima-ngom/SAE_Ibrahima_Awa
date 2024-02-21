@@ -58,4 +58,4 @@ def admin_comment_valider():
     mycursor = get_db().cursor()
     sql = '''   requête admin_coupe_jean_4   '''
     get_db().commit()
-    return redirect('/admin/article/commentaires?id_jean='+id_jean)
+    return redirect('/admin/jean/commentaires?id_jean='+id_jean)
