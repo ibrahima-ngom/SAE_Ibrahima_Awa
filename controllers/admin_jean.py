@@ -17,22 +17,40 @@ admin_jean = Blueprint('admin_jean', __name__,
 @admin_jean.route('/admin/jean/show')
 def show_jean():
     mycursor = get_db().cursor()
-    sql = '''  requête admin_jean_1
-    '''
+    sql = '''SELECT j.id_jean, j.nom_jean, j.coupe_jean_id, j.prix_jean, d.stock AS stock, COUNT(c.id_jean) AS nb_commentaires_nouveaux, COUNT(DISTINCT d.id_declinaison_jean) AS nb_declinaisons, j.image
+             FROM jean j
+             LEFT JOIN commentaire c ON j.id_jean = c.id_jean AND c.valider = 'non'
+             LEFT JOIN declinaison d ON j.id_jean = d.id_jean
+             GROUP BY j.id_jean'''
     mycursor.execute(sql)
     jeans = mycursor.fetchall()
     return render_template('admin/jean/show_jean.html', jeans=jeans)
 
 
-@admin_jean.route('/admin/jean/add', methods=['GET'])
+
+
+@admin_jean.route('/admin/jean/add', methods=['POST'])
 def add_jean():
     mycursor = get_db().cursor()
 
-    return render_template('admin/jean/add_jean.html'
-                           #,coupe_jean=coupe_jean,
-                           #,couleurs=colors
-                           #,tailles=tailles
-                            )
+    nom = request.form.get('nom')
+    prix = request.form.get('prix')
+    fournisseur = request.form.get('fournisseur')
+    matiere = request.form.get('matiere')
+    marque = request.form.get('marque')
+    stock = request.form.get('stock')
+    description = request.form.get('description')
+    id_coupe_jean = request.form.get('id_coupe_jean')
+    image = request.form.get('image')
+
+    sql = '''INSERT INTO jean (nom_jean, prix_jean, fournisseur, matiere, marque, stock, description, id_coupe_jean, image) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
+    mycursor.execute(sql, (nom, prix, fournisseur, matiere, marque, stock, description, id_coupe_jean, image))
+    get_db().commit()
+
+    flash(u'Jean ajouté avec succès', 'alert-success')
+
+    return redirect('/admin/jean/show')
+
 
 
 @admin_jean.route('/admin/jean/add', methods=['POST'])
@@ -52,7 +70,7 @@ def valid_add_jean():
         print("erreur")
         filename=None
 
-    sql = '''  requête admin_jean_2 '''
+    sql = ''' INSERT INTO jean (nom_jean, image, prix_jean, id_coupe_jean, description) VALUES (%s, %s, %s, %s, %s)'''
 
     tuple_add = (nom, filename, prix, coupe_jean_id, description)
     print(tuple_add)
@@ -69,32 +87,43 @@ def valid_add_jean():
 
 @admin_jean.route('/admin/jean/delete', methods=['GET'])
 def delete_jean():
-    id_jean=request.args.get('id_jean')
+    id_jean = request.args.get('id_jean')
     mycursor = get_db().cursor()
-    sql = ''' requête admin_jean_3 '''
-    mycursor.execute(sql, id_jean)
+
+    # Requête pour vérifier s'il y a des déclinaisons associées à cet article
+    sql_count_declinaisons = '''SELECT COUNT(*) AS nb_declinaison FROM declinaison WHERE id_jean = %s'''
+    mycursor.execute(sql_count_declinaisons, (id_jean,))
     nb_declinaison = mycursor.fetchone()
+
     if nb_declinaison['nb_declinaison'] > 0:
-        message= u'il y a des declinaisons dans cet article : vous ne pouvez pas le supprimer'
+        message = u'Il y a des déclinaisons dans cet article : vous ne pouvez pas le supprimer.'
         flash(message, 'alert-warning')
     else:
-        sql = ''' requête admin_article_4 '''
-        mycursor.execute(sql, id_jean)
+        # Requête pour supprimer les commentaires associés à cet article
+        sql_delete_comments = '''DELETE FROM commentaire WHERE id_jean = %s'''
+        mycursor.execute(sql_delete_comments, (id_jean,))
+
+        # Requête pour récupérer les données de l'article avant la suppression
+        sql_get_jean = '''SELECT * FROM jean WHERE id_jean = %s'''
+        mycursor.execute(sql_get_jean, (id_jean,))
         jean = mycursor.fetchone()
-        print(jean)
         image = jean['image']
 
-        sql = ''' requête admin_article_5  '''
-        mycursor.execute(sql, id_jean)
+        # Requête pour supprimer l'article lui-même
+        sql_delete_jean = '''DELETE FROM jean WHERE id_jean = %s'''
+        mycursor.execute(sql_delete_jean, (id_jean,))
         get_db().commit()
-        if image != None:
-            os.remove('static/images/' + image)
 
-        print("un jean supprimé, id :", id_jean)
-        message = u'un jean supprimé, id : ' + id_jean
+        # Supprimer l'image associée à l'article si elle existe
+        if image is not None:
+            os.remove(os.path.join('static/images/', image))
+
+        print("Un jean a été supprimé, ID :", id_jean)
+        message = u'Un jean a été supprimé, ID : ' + id_jean
         flash(message, 'alert-success')
 
     return redirect('/admin/jean/show')
+
 
 
 @admin_jean.route('/admin/jean/edit', methods=['GET'])

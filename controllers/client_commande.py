@@ -18,7 +18,7 @@ def client_commande_valide():
     # Étape 1 : Sélection des articles du panier
     sql = '''SELECT * FROM ligne_panier WHERE id_utilisateur = %s'''
     mycursor.execute(sql, (id_client,))
-    articles_panier = mycursor.fetchall()
+    jeans_panier = mycursor.fetchall()
 
     # Calcul du prix total du panier
     prix_total = sum(item['prix_jean'] * item['quantite'] for item in jeans_panier)

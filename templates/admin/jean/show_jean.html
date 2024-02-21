@@ -21,12 +21,12 @@ articles (tableau de dictionnaires)
 <table class="table">
     <thead class="thead-dark">
         <tr>
-            <th>nom</th><th>id</th><th>type article (id)</th><th>prix</th><th style="color: green">stock</th>
+            <th>nom</th><th>id</th><th>coupe_jean(id)</th><th>prix</th><th style="color: green">stock</th>
             <th>nouveaux avis</th><th>nb déclinaisons</th><th>image</th><th>opération</th>
         </tr>
     </thead>
     <tbody>
-    {% if articles | length >= 1 %}
+    {% if jeans | length >= 1 %}
         {% for ligne in jeans %}
            <tr>
                   <td>{{ ligne.nom }}</td>
