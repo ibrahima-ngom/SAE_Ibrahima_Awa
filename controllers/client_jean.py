@@ -25,7 +25,7 @@ def client_jean_show():
     coupe_jean = mycursor.fetchall()
 
     # Récupérer les articles du panier (vous devrez implémenter cette partie)
-    articles_panier = []
+    jeans_panier = []
     sql = " SELECT * FROM     "
 
 

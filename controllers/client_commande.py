@@ -21,13 +21,13 @@ def client_commande_valide():
     articles_panier = mycursor.fetchall()
 
     # Calcul du prix total du panier
-    prix_total = sum(item['prix_jean'] * item['quantite'] for item in articles_panier)
+    prix_total = sum(item['prix_jean'] * item['quantite'] for item in jeans_panier)
 
     # Étape 2 : Sélection des adresses
     # À compléter : Ajoutez le code pour récupérer les adresses (livraison et facturation) de l'utilisateur
 
     return render_template('client/boutique/panier_validation_adresses.html',
-                           articles_panier=articles_panier,
+                           jeans_panier=jeans_panier,
                            prix_total=prix_total,
                            validation=1
                            #, adresses=adresses
@@ -88,7 +88,7 @@ def client_commande_show():
     mycursor.execute(sql, (id_client,))
     commandes = mycursor.fetchall()
 
-    articles_commande = None
+    jeans_commande = None
     commande_adresses = None
 
     id_commande = request.args.get('id_commande', None)
@@ -96,11 +96,11 @@ def client_commande_show():
         # Sélection du détail d'une commande
         sql = '''SELECT * FROM ligne_commande WHERE id_commande = %s'''
         mycursor.execute(sql, (id_commande,))
-        articles_commande = mycursor.fetchall()
+        jeans_commande = mycursor.fetchall()
 
     return render_template('client/commandes/show.html'
                            , commandes=commandes
-                           , articles_commande=articles_commande
+                           , jeans_commande=jeans_commande
                            , commande_adresses=commande_adresses
                            )
 
