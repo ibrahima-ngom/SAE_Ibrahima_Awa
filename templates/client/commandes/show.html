@@ -8,7 +8,7 @@
                     <tr><th>Nom</th><th>Quantite</th><th>Prix</th><th>Prix total</th></tr>
                 </thead>
                 <tbody>
-                        {% for ligne in articles_commande %}
+                        {% for ligne in jeans_commande %}
                             <tr>
                                 <td>{{ ligne.nom }}
                                 {% if ligne.nb_declinaisons is defined and ligne.nb_declinaisons > 1 %}
@@ -66,7 +66,7 @@
                         {% for commande in commandes %}
                             <tr id="" {% if commande.etat_id == 1 %} style="background: #FFD600; font-weight: bold;" {% endif %}>
                                 <td>{{ commande.date_achat.strftime('%d-%m-%Y') }}</td>
-                                <td> {{ commande.nbr_articles }} </td>
+                                <td> {{ commande.nbr_jeans }} </td>
                                 <td>
                                     {{ "{:,.2f} €".format(commande.prix_total) }}
                                 </td>
@@ -79,7 +79,7 @@
                                     {% endif %}
                                 </td>
                                 <td style="text-align: center;">
-                                    <a href="/client/commande/show?id_commande={{ commande.id_commande }}">
+                                    <a href="/admin/commande/show?id_commande={{ commande.id_commande }}">
                                         <button class="btn btn-primary" > Details </button>
                                     </a>
                                 </td>

@@ -1,7 +1,7 @@
 {#
 articles (tableau de dictionnaires)
 * tableau de "article"
-    * id_article, nom, type_article_id, prix
+    * id_jean, nom, coupe_jean_id, prix
     * option :
         * stock ,
         * nb_avis ,
@@ -31,7 +31,7 @@ articles (tableau de dictionnaires)
            <tr>
                   <td>{{ ligne.nom }}</td>
                   <td>{{ ligne.id_jean }}</td>
-                  <td><span style="color: red">{{ ligne.libelle }}</span> ({{ ligne.type_article_id }})</td>
+                  <td><span style="color: red">{{ ligne.libelle }}</span> ({{ ligne.coupe_jean_id }})</td>
                   <td>{#{ ligne.prix }#}  {{  "{:,.2f} €".format(ligne.prix) }}</td>
                   <td>
                   {% if ligne.stock is defined %}
