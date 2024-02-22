@@ -13,6 +13,7 @@ articles (tableau de dictionnaires)
     <title>afficher les jeans</title>
 {% endblock %}
 
+
 {% block body %}
 <h3>jean</h3>
 <a  class="btn btn-outline-success" href="/admin/jean/add">ajouter un jean</a>
@@ -29,7 +30,7 @@ articles (tableau de dictionnaires)
     {% if jeans | length >= 1 %}
         {% for ligne in jeans %}
            <tr>
-                  <td>{{ ligne.nom }}</td>
+                  <td>{{ ligne.nom_jean }}</td>
                   <td>{{ ligne.id_jean }}</td>
                   <td><span style="color: red">{{ ligne.libelle }}</span> ({{ ligne.coupe_jean_id }})</td>
                   <td>{{ (ligne.prix_jean) }} €</td>
