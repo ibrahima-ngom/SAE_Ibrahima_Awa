@@ -17,11 +17,13 @@ admin_jean = Blueprint('admin_jean', __name__,
 @admin_jean.route('/admin/jean/show')
 def show_jean():
     mycursor = get_db().cursor()
-    sql = '''SELECT j.id_jean, j.nom_jean, j.coupe_jean_id, j.prix_jean, d.stock AS stock, COUNT(c.id_commentaire) AS nb_commentaires_nouveaux, COUNT(DISTINCT d.id_declinaison_jean) AS nb_declinaisons, j.image
-             FROM jean j
-             LEFT JOIN commentaire c ON j.id_jean = c.id_jean AND c.valider = 'non'
-             LEFT JOIN declinaison d ON j.id_jean = d.id_jean
-             GROUP BY j.id_jean'''
+    sql = '''SELECT j.id_jean, j.nom_jean, j.coupe_jean_id, j.prix_jean, MAX(d.stock) AS stock_max, COUNT(c.id_jean) AS nb_commentaires_nouveaux, COUNT(DISTINCT d.id_declinaison_jean) AS nb_declinaisons, j.image
+FROM jean j
+LEFT JOIN commentaire c ON j.id_jean = c.id_jean AND c.valider = 'non'
+LEFT JOIN declinaison d ON j.id_jean = d.id_jean
+GROUP BY j.id_jean, j.nom_jean, j.coupe_jean_id, j.prix_jean, j.image
+
+        '''
     mycursor.execute(sql)
     jeans = mycursor.fetchall()
     return render_template('admin/jean/show_jean.html', jeans=jeans)
@@ -30,27 +32,16 @@ def show_jean():
 
 
 
-@admin_jean.route('/admin/jean/add', methods=['POST'])
+
+@admin_jean.route('/admin/jean/add', methods=['GET'])
 def add_jean():
     mycursor = get_db().cursor()
 
-    nom = request.form.get('nom')
-    prix = request.form.get('prix')
-    fournisseur = request.form.get('fournisseur')
-    matiere = request.form.get('matiere')
-    marque = request.form.get('marque')
-    stock = request.form.get('stock')
-    description = request.form.get('description')
-    id_coupe_jean = request.form.get('id_coupe_jean')
-    image = request.form.get('image')
-
-    sql = '''INSERT INTO jean (nom_jean, prix_jean, fournisseur, matiere, marque, stock, description, id_coupe_jean, image) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-    mycursor.execute(sql, (nom, prix, fournisseur, matiere, marque, stock, description, id_coupe_jean, image))
-    get_db().commit()
-
-    flash(u'Jean ajouté avec succès', 'alert-success')
-
-    return redirect('/admin/jean/show')
+    return render_template('admin/jean/add_jean.html'
+                           #,types_article=type_article,
+                           #,couleurs=colors
+                           #,tailles=tailles
+                            )
 
 
 
@@ -71,7 +62,7 @@ def valid_add_jean():
         print("erreur")
         filename=None
 
-    sql = ''' INSERT INTO jean (nom_jean, image, prix_jean, id_coupe_jean, description) VALUES (%s, %s, %s, %s, %s)'''
+    sql = ''' INSERT INTO jean (nom_jean, image, prix_jean, coupe_jean_id, description) VALUES (%s, %s, %s, %s, %s)'''
 
     tuple_add = (nom, filename, prix, coupe_jean_id, description)
     print(tuple_add)
@@ -138,7 +129,7 @@ def edit_jean():
     jean = mycursor.fetchone()
 
     # Requête pour récupérer les coupes de jean disponibles
-    sql_coupes_jean = '''SELECT * FROM coupes_jean'''
+    sql_coupes_jean = '''SELECT * FROM coupe_jean'''
     mycursor.execute(sql_coupes_jean)
     coupes_jean = mycursor.fetchall()
 

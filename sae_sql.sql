@@ -39,11 +39,11 @@ CREATE TABLE jean(
    marque VARCHAR(50),
    stock INT,
    description VARCHAR(50),
-   id_coupe_jean INT NOT NULL,
+   coupe_jean_id INT NOT NULL,
    image VARCHAR(50),
 
    PRIMARY KEY(id_jean),
-   FOREIGN KEY(id_coupe_jean) REFERENCES coupe_jean(id_coupe_jean)
+   FOREIGN KEY(coupe_jean_id) REFERENCES coupe_jean(id_coupe_jean)
 );
 
 CREATE TABLE taille(
@@ -222,7 +222,7 @@ VALUES
 (3, 'Blanc', 3),
 (4, 'Gris', 4);
 
-INSERT INTO jean (id_jean, nom_jean, prix_jean, fournisseur, matiere, marque, stock, description, id_coupe_jean, image)
+INSERT INTO jean (id_jean, nom_jean, prix_jean, fournisseur, matiere, marque, stock, description,coupe_jean_id, image)
 VALUES
 (1, 'cargo', 50, 'FournisseurA', 'Denim', 'MarqueX', 10, 'Description du jean slim', 1, 'cargo.jpg'),
 (2, 'chino ajuste', 40, 'FournisseurB', 'Coton', 'MarqueY', 5, 'Description du jean droit', 2, 'chino_ajuste.jpg'),

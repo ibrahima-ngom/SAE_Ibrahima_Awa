@@ -32,7 +32,7 @@ articles (tableau de dictionnaires)
                   <td>{{ ligne.nom }}</td>
                   <td>{{ ligne.id_jean }}</td>
                   <td><span style="color: red">{{ ligne.libelle }}</span> ({{ ligne.coupe_jean_id }})</td>
-                  <td>{#{ ligne.prix }#}  {{  "{:,.2f} €".format(ligne.prix) }}</td>
+                  <td>{{ (ligne.prix_jean) }} €</td>
                   <td>
                   {% if ligne.stock is defined %}
                      {% if ligne.stock != None  %}
@@ -80,8 +80,8 @@ articles (tableau de dictionnaires)
                   </td>
                   <td>
                       <a  class="btn btn-outline-danger" href="/admin/jean/delete?id_jean={{ ligne.id_jean }}" onclick="return confirm('Are you sure?')" >supprimer</a>
-                      <a  class="btn btn-outline-warning" href="/admin/jean/edit?id_article={{ ligne.id_jean }}">editer</a>
-                      <a  class="btn btn-outline-warning" href="/admin/jean/commentaires?id_article={{ ligne.id_jean }}">commentaires</a>
+                      <a  class="btn btn-outline-warning" href="/admin/jean/edit?id_jean={{ ligne.id_jean }}">editer</a>
+                      <a  class="btn btn-outline-warning" href="/admin/jean/commentaires?id_jean={{ ligne.id_jean }}">commentaires</a>
                   </td>
            </tr>
         {% endfor %}
