@@ -13,33 +13,33 @@ types_article : tableau de dictionnaires
 
 {% extends 'admin/layout_admin.html' %}
 {% block title %}
-    <title>modifier un article</title>
+    <title>modifier un jean</title>
 {% endblock %}
 
 {% block body %}
-    <h2>modifier un article</h2>
+    <h2>modifier un jean</h2>
         <div class="row mt-5">
-        {%  if article.image is not none %}
-            <img class="card-img-top rounded mx-4 d-block"  style="width:200px; height:200px; border: 1px solid black; padding: 25px;"   id="img_output" src="{{ url_for('static', filename = 'images/') }}{{ jean.image}}"  alt="image  de {{ jean.nom }}" >
+        {%  if jean.image is not none %}
+            <img class="card-img-top rounded mx-4 d-block"  style="width:200px; height:200px; border: 1px solid black; padding: 25px;"   id="img_output" src="{{ url_for('static', filename = 'images/') }}{{ jean.image}}"  alt="image  de {{ jean.nom_jean }}" >
         {% endif %}
             <div class="w-25">
                 <form class="w-190" method="post" action="/admin/jean/edit" enctype="multipart/form-data">
                     <input type="hidden" value="{{ jean.id_jean }}" name="id_jean">
                     <label for="nom">Nom :
-                        <input name="nom" type="text" value="{{ jean.nom }}" class="form-control">
+                        <input name="nom" type="text" value="{{ jean.nom_jean }}" class="form-control">
                     </label>
                     <label for="prix" > Prix (€) :
-                        <input name="prix" type="number" min="0.0" step="0.01" value="{{ jean.prix }}" class="form-control" >
+                        <input name="prix" type="number" min="0.0" step="0.01" value="{{ jean.prix_jean }}" class="form-control" >
                     </label>
                     <label for="image">Image :                       {# à modifier #}
                         <input name="image"  onchange="loadFile(event)" type="file" class="form-control" value="{{ jean.image }}">             {# à modifier #}
                     </label>                                         {# à modifier #}
 {#                https://blog.miguelgrinberg.com/post/handling-file-uploads-with-flask#}
 
-                <label for="type_jean_id">Type de jean :
-                    <select name="type_jean_id" class="form-select">
-                            {% for type in types_article %}
-                                 <option value="{{ type.id_type_jean }}" {% if type.id_type_jean == jean.type_jean_id %} selected {% endif %}> {{ type.libelle }}</option>
+                <label for="coupe_jean_id">Coupe de jean :
+                    <select name="coupe_jean_id" class="form-select">
+                            {% for type in coupes_jean %}
+                                 <option value="{{ type.id_coupe_jean }}" {% if type.id_coupe_jean == jean.coupe_jean_id %} selected {% endif %}> {{ type.libelle }}</option>
                             {% endfor %}
                         </select>
                     </label>
@@ -77,7 +77,7 @@ types_article : tableau de dictionnaires
                                 <td></td>
                             </tr>
                         {% else %}
-                            {% for declinaison_jean in declinaisons_article %}
+                            {% for declinaison_jean in declinaisons_jean %}
                                 <tr>
                                     <td>
                                         {{ declinaison_jean.libelle_taille }}

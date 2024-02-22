@@ -144,6 +144,8 @@ def edit_jean():
                            # declinaisons_jean=declinaisons_jean)
 
 
+
+
 @admin_jean.route('/admin/jean/edit', methods=['POST'])
 def valid_edit_jean():
     mycursor = get_db().cursor()
@@ -153,32 +155,39 @@ def valid_edit_jean():
     coupe_jean_id = request.form.get('coupe_jean_id', '')
     prix = request.form.get('prix', '')
     description = request.form.get('description')
-    sql = '''
-       requête admin_jean_8
-       '''
-    mycursor.execute(sql, id_jean)
-    image_nom = mycursor.fetchone()
-    image_nom = image_nom['image']
-    if image:
-        if image_nom != "" and image_nom is not None and os.path.exists(
-                os.path.join(os.getcwd() + "/static/images/", image_nom)):
+
+    # Requête SQL pour récupérer le nom de l'image actuelle du jean
+    sql_image = "SELECT image FROM jean WHERE id_jean = %s"
+    mycursor.execute(sql_image, (id_jean,))
+    image_data = mycursor.fetchone()
+    image_nom = image_data['image'] if image_data else None
+
+    # Supprimer l'image actuelle si une nouvelle image est téléchargée
+    if image and image_nom:
+        if os.path.exists(os.path.join(os.getcwd() + "/static/images/", image_nom)):
             os.remove(os.path.join(os.getcwd() + "/static/images/", image_nom))
-        # filename = secure_filename(image.filename)
-        if image:
-            filename = 'img_upload_' + str(int(2147483647 * random())) + '.png'
-            image.save(os.path.join('static/images/', filename))
-            image_nom = filename
 
-    sql = '''  requête admin_jean_9 '''
-    mycursor.execute(sql, (nom, image_nom, prix, coupe_jean_id, description, id_jean))
+    # Enregistrer la nouvelle image
+    if image:
+        #filename = secure_filename(image.filename)
+        filename = 'img_upload_' + str(int(2147483647 * random())) + '.png'
+        image.save(os.path.join('static/images/', filename))
+        image_nom = filename
 
+    # Requête SQL pour mettre à jour les informations du jean
+    sql_update = '''
+        UPDATE jean 
+        SET nom_jean = %s, image = %s, prix_jean = %s, coupe_jean_id = %s, description = %s 
+        WHERE id_jean = %s
+    '''
+    mycursor.execute(sql_update, (nom, image_nom, prix, coupe_jean_id, description, id_jean))
     get_db().commit()
-    if image_nom is None:
-        image_nom = ''
-    message = u'jean modifié , nom:' + nom + '- coupe_jean :' + coupe_jean_id + ' - prix:' + prix  + ' - image:' + image_nom + ' - description: ' + description
-    flash(message, 'alert-success')
-    return redirect('/admin/jean/show')
 
+    # Affichage du message de succès
+    message = u'Jean modifié - Nom: {} - Coupe Jean: {} - Prix: {} - Image: {} - Description: {}'.format(nom, coupe_jean_id, prix, image_nom, description)
+    flash(message, 'alert-success')
+
+    return redirect('/admin/jean/show')
 
 
 
